@@ -4,7 +4,6 @@ import * as AWS  from 'aws-sdk'
 import * as uuid from 'uuid'
 
 const docClient = new AWS.DynamoDB.DocumentClient()
-
 const groupsTable = process.env.GROUPS_TABLE
 const imagesTable = process.env.IMAGES_TABLE
 
@@ -25,23 +24,22 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
   }
 
-  const parsedBody = JSON.parse(event.body)
-
   const imageId = uuid.v4()
 
   const newItem = await createImage(groupId, imageId, event)
 
-  await docClient.put({
-    TableName: imagesTable,
-    Item: newItem
-  }).promise()
+  // await docClient.put({
+  //   TableName: imagesTable,
+  //   Item: newItem
+  // }).promise()
 
   return {
     statusCode: 201,
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
     },
-    body: ''
+    body: JSON.stringify({newItem})
   }
 }
 
