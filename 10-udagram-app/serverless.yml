@@ -86,6 +86,14 @@ functions:
           path: groups/{groupId}/images
           cors: true
 
+  GetImage:
+    handler: src/lambda/http/getImage.handler
+    events:
+      - http:
+          method: get
+          path: images/{imageId}
+          cors: true
+
 resources:
   Resources:
     GroupsDynamoDBTable:
@@ -101,7 +109,7 @@ resources:
         TableName: ${self:provider.environment.GROUPS_TABLE}
 
     ImagesDynamoDBTable:
-      Type: "AWS::DynamoDB::Table"
+      Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
           - AttributeName: groupId
